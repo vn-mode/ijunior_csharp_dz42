@@ -24,9 +24,9 @@ class Program
 
         Library library = new Library();
 
-        library.AddBook(new Book { Title = "Книга 1", Author = "Автор 1", Year = 2000 });
-        library.AddBook(new Book { Title = "Книга 2", Author = "Автор 2", Year = 2005 });
-        library.AddBook(new Book { Title = "Книга 3", Author = "Автор 1", Year = 2010 });
+        library.AddBook(new Book("Книга 1", "Автор 1", 2000));
+        library.AddBook(new Book("Книга 2", "Автор 2", 2005));
+        library.AddBook(new Book("Книга 3", "Автор 1", 2010));
 
         while (true)
         {
@@ -42,42 +42,46 @@ class Program
 
             Console.WriteLine();
 
-            if (choice == CommandShowAllBooks)
-            {
-                library.ShowAllBooks();
-            }
-            else if (choice == CommandShowByAuthor)
-            {
-                Console.Write(EnterAuthorMessage);
-                string author = Console.ReadLine();
-                library.ShowBooksByAuthor(author);
-            }
-            else if (choice == CommandShowByTitle)
-            {
-                Console.Write(EnterTitleMessage);
-                string title = Console.ReadLine();
-                library.ShowBooksByTitle(title);
-            }
-            else if (choice == CommandShowByYear)
-            {
-                Console.Write(EnterYearMessage);
-                int year;
-                if (int.TryParse(Console.ReadLine(), out year))
-                {
-                    library.ShowBooksByYear(year);
-                }
-                else
-                {
-                    Console.WriteLine("Некорректный год. Попробуйте еще раз.");
-                }
-            }
-            else if (choice == CommandExit)
+            if (choice == CommandExit)
             {
                 break;
             }
-            else
+
+            switch (choice)
             {
-                Console.WriteLine("Некорректный выбор. Попробуйте еще раз.");
+                case CommandShowAllBooks:
+                    library.ShowAllBooks();
+                    break;
+
+                case CommandShowByAuthor:
+                    Console.Write(EnterAuthorMessage);
+                    string author = Console.ReadLine();
+                    library.ShowBooksByAuthor(author);
+                    break;
+
+                case CommandShowByTitle:
+                    Console.Write(EnterTitleMessage);
+                    string title = Console.ReadLine();
+                    library.ShowBooksByTitle(title);
+                    break;
+
+                case CommandShowByYear:
+                    Console.Write(EnterYearMessage);
+                    int year;
+
+                    if (int.TryParse(Console.ReadLine(), out year))
+                    {
+                        library.ShowBooksByYear(year);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Некорректный год. Попробуйте еще раз.");
+                    }
+                    break;
+
+                default:
+                    Console.WriteLine("Некорректный выбор. Попробуйте еще раз.");
+                    break;
             }
 
             Console.WriteLine();
@@ -87,9 +91,16 @@ class Program
 
 class Book
 {
-    public string Title { get; set; }
-    public string Author { get; set; }
-    public int Year { get; set; }
+    public string Title { get; }
+    public string Author { get; }
+    public int Year { get; }
+
+    public Book(string title, string author, int year)
+    {
+        Title = title;
+        Author = author;
+        Year = year;
+    }
 
     public override string ToString()
     {
@@ -120,16 +131,20 @@ class Library
     {
         const string AllBooksMessage = "Все книги:";
         Console.WriteLine(AllBooksMessage);
+
         foreach (var book in _books)
         {
             Console.WriteLine(book);
         }
+
+        Console.WriteLine();
     }
 
     public void ShowBooksByAuthor(string author)
     {
         string booksByAuthorMessage = $"Книги автора {author}:";
         Console.WriteLine(booksByAuthorMessage);
+
         foreach (var book in _books)
         {
             if (book.Author.Equals(author, StringComparison.OrdinalIgnoreCase))
@@ -137,12 +152,15 @@ class Library
                 Console.WriteLine(book);
             }
         }
+
+        Console.WriteLine();
     }
 
     public void ShowBooksByTitle(string title)
     {
         string booksWithTitleMessage = $"Книги с названием '{title}':";
         Console.WriteLine(booksWithTitleMessage);
+
         foreach (var book in _books)
         {
             if (book.Title.Equals(title, StringComparison.OrdinalIgnoreCase))
@@ -150,12 +168,15 @@ class Library
                 Console.WriteLine(book);
             }
         }
+
+        Console.WriteLine();
     }
 
     public void ShowBooksByYear(int year)
     {
         string booksByYearMessage = $"Книги, выпущенные в {year} году:";
         Console.WriteLine(booksByYearMessage);
+
         foreach (var book in _books)
         {
             if (book.Year == year)
@@ -163,5 +184,7 @@ class Library
                 Console.WriteLine(book);
             }
         }
+
+        Console.WriteLine();
     }
 }
