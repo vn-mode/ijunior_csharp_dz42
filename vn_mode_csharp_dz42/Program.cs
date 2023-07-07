@@ -9,6 +9,19 @@ class Program
         const string EnterTitleMessage = "Введите название книги, чтобы показать книги: ";
         const string EnterYearMessage = "Введите год, чтобы показать книги: ";
 
+        const string CommandShowAllBooks = "1";
+        const string CommandShowByAuthor = "2";
+        const string CommandShowByTitle = "3";
+        const string CommandShowByYear = "4";
+        const string CommandExit = "5";
+
+        const string MenuTitle = "Меню:";
+        const string OptionShowAllBooks = $"{CommandShowAllBooks}. Показать все книги";
+        const string OptionShowByAuthor = $"{CommandShowByAuthor}. Показать книги по автору";
+        const string OptionShowByTitle = $"{CommandShowByTitle}. Показать книги по названию";
+        const string OptionShowByYear = $"{CommandShowByYear}. Показать книги по году";
+        const string OptionExit = $"{CommandExit}. Выйти";
+
         Library library = new Library();
 
         library.AddBook(new Book { Title = "Книга 1", Author = "Автор 1", Year = 2000 });
@@ -17,43 +30,54 @@ class Program
 
         while (true)
         {
-            Console.WriteLine("Меню:");
-            Console.WriteLine("1. Показать все книги");
-            Console.WriteLine("2. Показать книги по автору");
-            Console.WriteLine("3. Показать книги по названию");
-            Console.WriteLine("4. Показать книги по году");
-            Console.WriteLine("5. Выйти");
+            Console.WriteLine(MenuTitle);
+            Console.WriteLine(OptionShowAllBooks);
+            Console.WriteLine(OptionShowByAuthor);
+            Console.WriteLine(OptionShowByTitle);
+            Console.WriteLine(OptionShowByYear);
+            Console.WriteLine(OptionExit);
 
             Console.Write("Введите номер пункта: ");
             string choice = Console.ReadLine();
 
             Console.WriteLine();
 
-            switch (choice)
+            if (choice == CommandShowAllBooks)
             {
-                case "1":
-                    library.ShowAllBooks();
-                    break;
-                case "2":
-                    Console.Write(EnterAuthorMessage);
-                    string author = Console.ReadLine();
-                    library.ShowBooksByAuthor(author);
-                    break;
-                case "3":
-                    Console.Write(EnterTitleMessage);
-                    string title = Console.ReadLine();
-                    library.ShowBooksByTitle(title);
-                    break;
-                case "4":
-                    Console.Write(EnterYearMessage);
-                    int year = int.Parse(Console.ReadLine());
+                library.ShowAllBooks();
+            }
+            else if (choice == CommandShowByAuthor)
+            {
+                Console.Write(EnterAuthorMessage);
+                string author = Console.ReadLine();
+                library.ShowBooksByAuthor(author);
+            }
+            else if (choice == CommandShowByTitle)
+            {
+                Console.Write(EnterTitleMessage);
+                string title = Console.ReadLine();
+                library.ShowBooksByTitle(title);
+            }
+            else if (choice == CommandShowByYear)
+            {
+                Console.Write(EnterYearMessage);
+                int year;
+                if (int.TryParse(Console.ReadLine(), out year))
+                {
                     library.ShowBooksByYear(year);
-                    break;
-                case "5":
-                    return;
-                default:
-                    Console.WriteLine("Некорректный выбор. Попробуйте еще раз.");
-                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Некорректный год. Попробуйте еще раз.");
+                }
+            }
+            else if (choice == CommandExit)
+            {
+                break;
+            }
+            else
+            {
+                Console.WriteLine("Некорректный выбор. Попробуйте еще раз.");
             }
 
             Console.WriteLine();
