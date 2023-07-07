@@ -5,28 +5,59 @@ class Program
 {
     static void Main(string[] args)
     {
-        const string enterAuthorMessage = "Введите имя автора, чтобы показать книги: ";
-        const string enterTitleMessage = "Введите название книги, чтобы показать книги: ";
-        const string enterYearMessage = "Введите год, чтобы показать книги: ";
+        const string EnterAuthorMessage = "Введите имя автора, чтобы показать книги: ";
+        const string EnterTitleMessage = "Введите название книги, чтобы показать книги: ";
+        const string EnterYearMessage = "Введите год, чтобы показать книги: ";
 
-        BookStore bookStore = new BookStore();
+        Library library = new Library();
 
-        bookStore.AddBook(new Book { Title = "Книга 1", Author = "Автор 1", Year = 2000 });
-        bookStore.AddBook(new Book { Title = "Книга 2", Author = "Автор 2", Year = 2005 });
-        bookStore.AddBook(new Book { Title = "Книга 3", Author = "Автор 1", Year = 2010 });
-        bookStore.ShowAllBooks();
+        library.AddBook(new Book { Title = "Книга 1", Author = "Автор 1", Year = 2000 });
+        library.AddBook(new Book { Title = "Книга 2", Author = "Автор 2", Year = 2005 });
+        library.AddBook(new Book { Title = "Книга 3", Author = "Автор 1", Year = 2010 });
 
-        Console.Write(enterAuthorMessage);
-        string author = Console.ReadLine();
-        bookStore.ShowBooksByAuthor(author);
+        while (true)
+        {
+            Console.WriteLine("Меню:");
+            Console.WriteLine("1. Показать все книги");
+            Console.WriteLine("2. Показать книги по автору");
+            Console.WriteLine("3. Показать книги по названию");
+            Console.WriteLine("4. Показать книги по году");
+            Console.WriteLine("5. Выйти");
 
-        Console.Write(enterTitleMessage);
-        string title = Console.ReadLine();
-        bookStore.ShowBooksByTitle(title);
+            Console.Write("Введите номер пункта: ");
+            string choice = Console.ReadLine();
 
-        Console.Write(enterYearMessage);
-        int year = int.Parse(Console.ReadLine());
-        bookStore.ShowBooksByYear(year);
+            Console.WriteLine();
+
+            switch (choice)
+            {
+                case "1":
+                    library.ShowAllBooks();
+                    break;
+                case "2":
+                    Console.Write(EnterAuthorMessage);
+                    string author = Console.ReadLine();
+                    library.ShowBooksByAuthor(author);
+                    break;
+                case "3":
+                    Console.Write(EnterTitleMessage);
+                    string title = Console.ReadLine();
+                    library.ShowBooksByTitle(title);
+                    break;
+                case "4":
+                    Console.Write(EnterYearMessage);
+                    int year = int.Parse(Console.ReadLine());
+                    library.ShowBooksByYear(year);
+                    break;
+                case "5":
+                    return;
+                default:
+                    Console.WriteLine("Некорректный выбор. Попробуйте еще раз.");
+                    break;
+            }
+
+            Console.WriteLine();
+        }
     }
 }
 
@@ -42,30 +73,30 @@ class Book
     }
 }
 
-class BookStore
+class Library
 {
-    private List<Book> books;
+    private List<Book> _books;
 
-    public BookStore()
+    public Library()
     {
-        books = new List<Book>();
+        _books = new List<Book>();
     }
 
     public void AddBook(Book book)
     {
-        books.Add(book);
+        _books.Add(book);
     }
 
     public void RemoveBook(Book book)
     {
-        books.Remove(book);
+        _books.Remove(book);
     }
 
     public void ShowAllBooks()
     {
-        const string allBooksMessage = "Все книги:";
-        Console.WriteLine(allBooksMessage);
-        foreach (var book in books)
+        const string AllBooksMessage = "Все книги:";
+        Console.WriteLine(AllBooksMessage);
+        foreach (var book in _books)
         {
             Console.WriteLine(book);
         }
@@ -75,7 +106,7 @@ class BookStore
     {
         string booksByAuthorMessage = $"Книги автора {author}:";
         Console.WriteLine(booksByAuthorMessage);
-        foreach (var book in books)
+        foreach (var book in _books)
         {
             if (book.Author.Equals(author, StringComparison.OrdinalIgnoreCase))
             {
@@ -88,7 +119,7 @@ class BookStore
     {
         string booksWithTitleMessage = $"Книги с названием '{title}':";
         Console.WriteLine(booksWithTitleMessage);
-        foreach (var book in books)
+        foreach (var book in _books)
         {
             if (book.Title.Equals(title, StringComparison.OrdinalIgnoreCase))
             {
@@ -101,7 +132,7 @@ class BookStore
     {
         string booksByYearMessage = $"Книги, выпущенные в {year} году:";
         Console.WriteLine(booksByYearMessage);
-        foreach (var book in books)
+        foreach (var book in _books)
         {
             if (book.Year == year)
             {
