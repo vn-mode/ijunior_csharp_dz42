@@ -5,87 +5,13 @@ class Program
 {
     static void Main(string[] args)
     {
-        const string EnterAuthorMessage = "Введите имя автора, чтобы показать книги: ";
-        const string EnterTitleMessage = "Введите название книги, чтобы показать книги: ";
-        const string EnterYearMessage = "Введите год, чтобы показать книги: ";
-
-        const string CommandShowAllBooks = "1";
-        const string CommandShowByAuthor = "2";
-        const string CommandShowByTitle = "3";
-        const string CommandShowByYear = "4";
-        const string CommandExit = "5";
-
-        const string MenuTitle = "Меню:";
-        const string OptionShowAllBooks = $"{CommandShowAllBooks}. Показать все книги";
-        const string OptionShowByAuthor = $"{CommandShowByAuthor}. Показать книги по автору";
-        const string OptionShowByTitle = $"{CommandShowByTitle}. Показать книги по названию";
-        const string OptionShowByYear = $"{CommandShowByYear}. Показать книги по году";
-        const string OptionExit = $"{CommandExit}. Выйти";
-
         Library library = new Library();
 
         library.AddBook(new Book("Книга 1", "Автор 1", 2000));
         library.AddBook(new Book("Книга 2", "Автор 2", 2005));
         library.AddBook(new Book("Книга 3", "Автор 1", 2010));
 
-        while (true)
-        {
-            Console.WriteLine(MenuTitle);
-            Console.WriteLine(OptionShowAllBooks);
-            Console.WriteLine(OptionShowByAuthor);
-            Console.WriteLine(OptionShowByTitle);
-            Console.WriteLine(OptionShowByYear);
-            Console.WriteLine(OptionExit);
-
-            Console.Write("Введите номер пункта: ");
-            string choice = Console.ReadLine();
-
-            Console.WriteLine();
-
-            if (choice == CommandExit)
-            {
-                break;
-            }
-
-            switch (choice)
-            {
-                case CommandShowAllBooks:
-                    library.ShowAllBooks();
-                    break;
-
-                case CommandShowByAuthor:
-                    Console.Write(EnterAuthorMessage);
-                    string author = Console.ReadLine();
-                    library.ShowBooksByAuthor(author);
-                    break;
-
-                case CommandShowByTitle:
-                    Console.Write(EnterTitleMessage);
-                    string title = Console.ReadLine();
-                    library.ShowBooksByTitle(title);
-                    break;
-
-                case CommandShowByYear:
-                    Console.Write(EnterYearMessage);
-                    int year;
-
-                    if (int.TryParse(Console.ReadLine(), out year))
-                    {
-                        library.ShowBooksByYear(year);
-                    }
-                    else
-                    {
-                        Console.WriteLine("Некорректный год. Попробуйте еще раз.");
-                    }
-                    break;
-
-                default:
-                    Console.WriteLine("Некорректный выбор. Попробуйте еще раз.");
-                    break;
-            }
-
-            Console.WriteLine();
-        }
+        library.Work();
     }
 }
 
@@ -186,5 +112,84 @@ class Library
         }
 
         Console.WriteLine();
+    }
+
+    public void Work()
+    {
+        const string EnterAuthorMessage = "Введите имя автора, чтобы показать книги: ";
+        const string EnterTitleMessage = "Введите название книги, чтобы показать книги: ";
+        const string EnterYearMessage = "Введите год, чтобы показать книги: ";
+
+        const string CommandShowAllBooks = "1";
+        const string CommandShowByAuthor = "2";
+        const string CommandShowByTitle = "3";
+        const string CommandShowByYear = "4";
+        const string CommandExit = "5";
+
+        const string MenuTitle = "Меню:";
+        const string OptionShowAllBooks = $"{CommandShowAllBooks}. Показать все книги";
+        const string OptionShowByAuthor = $"{CommandShowByAuthor}. Показать книги по автору";
+        const string OptionShowByTitle = $"{CommandShowByTitle}. Показать книги по названию";
+        const string OptionShowByYear = $"{CommandShowByYear}. Показать книги по году";
+        const string OptionExit = $"{CommandExit}. Выйти";
+
+        while (true)
+        {
+            Console.WriteLine(MenuTitle);
+            Console.WriteLine(OptionShowAllBooks);
+            Console.WriteLine(OptionShowByAuthor);
+            Console.WriteLine(OptionShowByTitle);
+            Console.WriteLine(OptionShowByYear);
+            Console.WriteLine(OptionExit);
+
+            Console.Write("Введите номер пункта: ");
+            string choice = Console.ReadLine();
+
+            Console.WriteLine();
+
+            if (choice == CommandExit)
+            {
+                break;
+            }
+
+            switch (choice)
+            {
+                case CommandShowAllBooks:
+                    ShowAllBooks();
+                    break;
+
+                case CommandShowByAuthor:
+                    Console.Write(EnterAuthorMessage);
+                    string author = Console.ReadLine();
+                    ShowBooksByAuthor(author);
+                    break;
+
+                case CommandShowByTitle:
+                    Console.Write(EnterTitleMessage);
+                    string title = Console.ReadLine();
+                    ShowBooksByTitle(title);
+                    break;
+
+                case CommandShowByYear:
+                    Console.Write(EnterYearMessage);
+                    int year;
+
+                    if (int.TryParse(Console.ReadLine(), out year))
+                    {
+                        ShowBooksByYear(year);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Некорректный год. Попробуйте еще раз.");
+                    }
+                    break;
+
+                default:
+                    Console.WriteLine("Некорректный выбор. Попробуйте еще раз.");
+                    break;
+            }
+
+            Console.WriteLine();
+        }
     }
 }
