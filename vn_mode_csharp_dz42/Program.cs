@@ -7,9 +7,9 @@ class Program
     {
         Library library = new Library();
 
-        library.AddBook(new Book("Книга 1", "Автор 1", 2000));
-        library.AddBook(new Book("Книга 2", "Автор 2", 2005));
-        library.AddBook(new Book("Книга 3", "Автор 1", 2010));
+        library.AddBook(new Book("Книга 1", "Толстой", 2000));
+        library.AddBook(new Book("Книга 2", "Пушкин", 2005));
+        library.AddBook(new Book("Книга 3", "Пупкин", 2010));
 
         library.Work();
     }
@@ -133,7 +133,9 @@ class Library
         const string OptionShowByYear = $"{CommandShowByYear}. Показать книги по году";
         const string OptionExit = $"{CommandExit}. Выйти";
 
-        while (true)
+        bool isWork = true;
+
+        while (isWork)
         {
             Console.WriteLine(MenuTitle);
             Console.WriteLine(OptionShowAllBooks);
@@ -146,11 +148,6 @@ class Library
             string choice = Console.ReadLine();
 
             Console.WriteLine();
-
-            if (choice == CommandExit)
-            {
-                break;
-            }
 
             switch (choice)
             {
@@ -182,6 +179,10 @@ class Library
                     {
                         Console.WriteLine("Некорректный год. Попробуйте еще раз.");
                     }
+                    break;
+
+                case CommandExit:
+                    isWork = false;
                     break;
 
                 default:
