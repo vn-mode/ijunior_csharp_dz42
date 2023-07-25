@@ -124,13 +124,17 @@ class Library
         const string CommandShowByAuthor = "2";
         const string CommandShowByTitle = "3";
         const string CommandShowByYear = "4";
-        const string CommandExit = "5";
+        const string CommandAddBook = "5";
+        const string CommandRemoveBook = "6";
+        const string CommandExit = "7";
 
         const string MenuTitle = "Меню:";
         const string OptionShowAllBooks = $"{CommandShowAllBooks}. Показать все книги";
         const string OptionShowByAuthor = $"{CommandShowByAuthor}. Показать книги по автору";
         const string OptionShowByTitle = $"{CommandShowByTitle}. Показать книги по названию";
         const string OptionShowByYear = $"{CommandShowByYear}. Показать книги по году";
+        const string OptionAddBook = $"{CommandAddBook}. Добавить книгу";
+        const string OptionRemoveBook = $"{CommandRemoveBook}. Удалить книгу";
         const string OptionExit = $"{CommandExit}. Выйти";
 
         bool isWork = true;
@@ -142,6 +146,8 @@ class Library
             Console.WriteLine(OptionShowByAuthor);
             Console.WriteLine(OptionShowByTitle);
             Console.WriteLine(OptionShowByYear);
+            Console.WriteLine(OptionAddBook);
+            Console.WriteLine(OptionRemoveBook);
             Console.WriteLine(OptionExit);
 
             Console.Write("Введите номер пункта: ");
@@ -178,6 +184,43 @@ class Library
                     else
                     {
                         Console.WriteLine("Некорректный год. Попробуйте еще раз.");
+                    }
+                    break;
+
+                case CommandAddBook:
+                    Console.Write("Введите название книги: ");
+                    string newTitle = Console.ReadLine();
+                    Console.Write("Введите автора книги: ");
+                    string newAuthor = Console.ReadLine();
+                    Console.Write("Введите год выпуска книги: ");
+                    if (int.TryParse(Console.ReadLine(), out int newYear))
+                    {
+                        Book newBook = new Book(newTitle, newAuthor, newYear);
+                        AddBook(newBook);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Некорректный год. Книга не добавлена.");
+                    }
+                    break;
+
+                case CommandRemoveBook:
+                    Console.Write("Введите название книги, которую хотите удалить: ");
+                    string bookToRemoveTitle = Console.ReadLine();
+                    bool removed = false;
+                    foreach (var book in _books)
+                    {
+                        if (book.Title.Equals(bookToRemoveTitle, StringComparison.OrdinalIgnoreCase))
+                        {
+                            RemoveBook(book);
+                            removed = true;
+                            Console.WriteLine($"Книга '{book.Title}' успешно удалена.");
+                            break;
+                        }
+                    }
+                    if (!removed)
+                    {
+                        Console.WriteLine($"Книга с названием '{bookToRemoveTitle}' не найдена.");
                     }
                     break;
 
