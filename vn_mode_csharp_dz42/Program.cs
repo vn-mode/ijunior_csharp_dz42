@@ -1,32 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 
-class Program
-{
-    static void Main(string[] args)
-    {
-        Library library = new Library();
-
-        library.AddBook(new Book("Книга 1", "Толстой", 2000));
-        library.AddBook(new Book("Книга 2", "Пушкин", 2005));
-        library.AddBook(new Book("Книга 3", "Пупкин", 2010));
-
-        library.Work();
-    }
-}
-
 class Book
 {
-    public string Title { get; }
-    public string Author { get; }
-    public int Year { get; }
+    private string title;
+    private string author;
+    private int year;
 
     public Book(string title, string author, int year)
     {
-        Title = title;
-        Author = author;
-        Year = year;
+        this.title = title;
+        this.author = author;
+        this.year = year;
     }
+
+    public string Title => title;
+    public string Author => author;
+    public int Year => year;
 
     public override string ToString()
     {
@@ -36,21 +26,21 @@ class Book
 
 class Library
 {
-    private List<Book> _books;
+    private List<Book> books;
 
     public Library()
     {
-        _books = new List<Book>();
+        books = new List<Book>();
     }
 
     public void AddBook(Book book)
     {
-        _books.Add(book);
+        books.Add(book);
     }
 
     public void RemoveBook(Book book)
     {
-        _books.Remove(book);
+        books.Remove(book);
     }
 
     public void ShowAllBooks()
@@ -58,7 +48,7 @@ class Library
         const string AllBooksMessage = "Все книги:";
         Console.WriteLine(AllBooksMessage);
 
-        foreach (var book in _books)
+        foreach (var book in books)
         {
             Console.WriteLine(book);
         }
@@ -71,7 +61,7 @@ class Library
         string booksByAuthorMessage = $"Книги автора {author}:";
         Console.WriteLine(booksByAuthorMessage);
 
-        foreach (var book in _books)
+        foreach (var book in books)
         {
             if (book.Author.Equals(author, StringComparison.OrdinalIgnoreCase))
             {
@@ -87,7 +77,7 @@ class Library
         string booksWithTitleMessage = $"Книги с названием '{title}':";
         Console.WriteLine(booksWithTitleMessage);
 
-        foreach (var book in _books)
+        foreach (var book in books)
         {
             if (book.Title.Equals(title, StringComparison.OrdinalIgnoreCase))
             {
@@ -103,7 +93,7 @@ class Library
         string booksByYearMessage = $"Книги, выпущенные в {year} году:";
         Console.WriteLine(booksByYearMessage);
 
-        foreach (var book in _books)
+        foreach (var book in books)
         {
             if (book.Year == year)
             {
@@ -163,14 +153,12 @@ class Library
 
                 case CommandShowByAuthor:
                     Console.Write(EnterAuthorMessage);
-                    string author = Console.ReadLine();
-                    ShowBooksByAuthor(author);
+                    ShowBooksByAuthor(Console.ReadLine());
                     break;
 
                 case CommandShowByTitle:
                     Console.Write(EnterTitleMessage);
-                    string title = Console.ReadLine();
-                    ShowBooksByTitle(title);
+                    ShowBooksByTitle(Console.ReadLine());
                     break;
 
                 case CommandShowByYear:
@@ -178,13 +166,9 @@ class Library
                     int year;
 
                     if (int.TryParse(Console.ReadLine(), out year))
-                    {
                         ShowBooksByYear(year);
-                    }
                     else
-                    {
                         Console.WriteLine("Некорректный год. Попробуйте еще раз.");
-                    }
                     break;
 
                 case CommandAddBook:
@@ -193,6 +177,7 @@ class Library
                     Console.Write("Введите автора книги: ");
                     string newAuthor = Console.ReadLine();
                     Console.Write("Введите год выпуска книги: ");
+
                     if (int.TryParse(Console.ReadLine(), out int newYear))
                     {
                         Book newBook = new Book(newTitle, newAuthor, newYear);
@@ -208,7 +193,8 @@ class Library
                     Console.Write("Введите название книги, которую хотите удалить: ");
                     string bookToRemoveTitle = Console.ReadLine();
                     bool removed = false;
-                    foreach (var book in _books)
+
+                    foreach (var book in books)
                     {
                         if (book.Title.Equals(bookToRemoveTitle, StringComparison.OrdinalIgnoreCase))
                         {
@@ -218,6 +204,7 @@ class Library
                             break;
                         }
                     }
+
                     if (!removed)
                     {
                         Console.WriteLine($"Книга с названием '{bookToRemoveTitle}' не найдена.");
@@ -235,5 +222,16 @@ class Library
 
             Console.WriteLine();
         }
+    }
+
+    static void Main(string[] args)
+    {
+        Library library = new Library();
+
+        library.AddBook(new Book("Книга 1", "Толстой", 2000));
+        library.AddBook(new Book("Книга 2", "Пушкин", 2005));
+        library.AddBook(new Book("Книга 3", "Пупкин", 2010));
+
+        library.Work();
     }
 }
