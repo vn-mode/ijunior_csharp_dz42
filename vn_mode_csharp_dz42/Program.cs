@@ -3,20 +3,20 @@ using System.Collections.Generic;
 
 class Book
 {
-    private string title;
-    private string author;
-    private int year;
+    private string _title;
+    private string _author;
+    private int _year;
 
     public Book(string title, string author, int year)
     {
-        this.title = title;
-        this.author = author;
-        this.year = year;
+        _title = title;
+        _author = author;
+        _year = year;
     }
 
-    public string Title => title;
-    public string Author => author;
-    public int Year => year;
+    public string Title => _title;
+    public string Author => _author;
+    public int Year => _year;
 
     public override string ToString()
     {
@@ -26,21 +26,21 @@ class Book
 
 class Library
 {
-    private List<Book> books;
+    private List<Book> _books;
 
     public Library()
     {
-        books = new List<Book>();
+        _books = new List<Book>();
     }
 
     public void AddBook(Book book)
     {
-        books.Add(book);
+        _books.Add(book);
     }
 
     public void RemoveBook(Book book)
     {
-        books.Remove(book);
+        _books.Remove(book);
     }
 
     public void ShowAllBooks()
@@ -48,7 +48,7 @@ class Library
         const string AllBooksMessage = "Все книги:";
         Console.WriteLine(AllBooksMessage);
 
-        foreach (var book in books)
+        foreach (var book in _books)
         {
             Console.WriteLine(book);
         }
@@ -61,7 +61,7 @@ class Library
         string booksByAuthorMessage = $"Книги автора {author}:";
         Console.WriteLine(booksByAuthorMessage);
 
-        foreach (var book in books)
+        foreach (var book in _books)
         {
             if (book.Author.Equals(author, StringComparison.OrdinalIgnoreCase))
             {
@@ -77,7 +77,7 @@ class Library
         string booksWithTitleMessage = $"Книги с названием '{title}':";
         Console.WriteLine(booksWithTitleMessage);
 
-        foreach (var book in books)
+        foreach (var book in _books)
         {
             if (book.Title.Equals(title, StringComparison.OrdinalIgnoreCase))
             {
@@ -93,7 +93,7 @@ class Library
         string booksByYearMessage = $"Книги, выпущенные в {year} году:";
         Console.WriteLine(booksByYearMessage);
 
-        foreach (var book in books)
+        foreach (var book in _books)
         {
             if (book.Year == year)
             {
@@ -152,63 +152,25 @@ class Library
                     break;
 
                 case CommandShowByAuthor:
-                    Console.Write(EnterAuthorMessage);
-                    ShowBooksByAuthor(Console.ReadLine());
+                    ShowBooksByAuthor(ReadStringInput(EnterAuthorMessage));
                     break;
 
                 case CommandShowByTitle:
-                    Console.Write(EnterTitleMessage);
-                    ShowBooksByTitle(Console.ReadLine());
+                    ShowBooksByTitle(ReadStringInput(EnterTitleMessage));
                     break;
 
                 case CommandShowByYear:
-                    Console.Write(EnterYearMessage);
-                    int year;
-
-                    if (int.TryParse(Console.ReadLine(), out year))
-                        ShowBooksByYear(year);
-                    else
-                        Console.WriteLine("Некорректный год. Попробуйте еще раз.");
+                    int year = ReadIntegerInput(EnterYearMessage);
+                    ShowBooksByYear(year);
                     break;
 
                 case CommandAddBook:
-                    Console.Write("Введите название книги: ");
-                    string newTitle = Console.ReadLine();
-                    Console.Write("Введите автора книги: ");
-                    string newAuthor = Console.ReadLine();
-                    Console.Write("Введите год выпуска книги: ");
-
-                    if (int.TryParse(Console.ReadLine(), out int newYear))
-                    {
-                        Book newBook = new Book(newTitle, newAuthor, newYear);
-                        AddBook(newBook);
-                    }
-                    else
-                    {
-                        Console.WriteLine("Некорректный год. Книга не добавлена.");
-                    }
+                    AddNewBook();
                     break;
 
                 case CommandRemoveBook:
-                    Console.Write("Введите название книги, которую хотите удалить: ");
-                    string bookToRemoveTitle = Console.ReadLine();
-                    bool removed = false;
-
-                    foreach (var book in books)
-                    {
-                        if (book.Title.Equals(bookToRemoveTitle, StringComparison.OrdinalIgnoreCase))
-                        {
-                            RemoveBook(book);
-                            removed = true;
-                            Console.WriteLine($"Книга '{book.Title}' успешно удалена.");
-                            break;
-                        }
-                    }
-
-                    if (!removed)
-                    {
-                        Console.WriteLine($"Книга с названием '{bookToRemoveTitle}' не найдена.");
-                    }
+                    string title = ReadStringInput("Введите название книги, которую хотите удалить: ");
+                    RemoveBookByTitle(title);
                     break;
 
                 case CommandExit:
@@ -221,6 +183,53 @@ class Library
             }
 
             Console.WriteLine();
+        }
+    }
+
+    private string ReadStringInput(string message)
+    {
+        Console.Write(message);
+        return Console.ReadLine();
+    }
+
+    private int ReadIntegerInput(string message)
+    {
+        Console.Write(message);
+
+        if (int.TryParse(Console.ReadLine(), out int result))
+            return result;
+
+        Console.WriteLine("Некорректный ввод. Попробуйте еще раз.");
+        return ReadIntegerInput(message);
+    }
+
+    private void AddNewBook()
+    {
+        string newTitle = ReadStringInput("Введите название книги: ");
+        string newAuthor = ReadStringInput("Введите автора книги: ");
+        int newYear = ReadIntegerInput("Введите год выпуска книги: ");
+        Book newBook = new Book(newTitle, newAuthor, newYear);
+        AddBook(newBook);
+    }
+
+    private void RemoveBookByTitle(string title)
+    {
+        bool removed = false;
+
+        foreach (var book in _books)
+        {
+            if (book.Title.Equals(title, StringComparison.OrdinalIgnoreCase))
+            {
+                RemoveBook(book);
+                removed = true;
+                Console.WriteLine($"Книга '{book.Title}' успешно удалена.");
+                break;
+            }
+        }
+
+        if (!removed)
+        {
+            Console.WriteLine($"Книга с названием '{title}' не найдена.");
         }
     }
 
